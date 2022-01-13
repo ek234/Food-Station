@@ -1,0 +1,11 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "react-scripts test"
+  },
+  "author": "Mihir",
+  "license": "ISC"
+}
