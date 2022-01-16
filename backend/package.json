@@ -1,11 +1,21 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "backend",
-  "main": "server.js",
-  "scripts": {
-    "test": "test"
-  },
-  "author": "Mihir",
-  "license": "ISC"
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "backend",
+	"main": "server.js",
+	"scripts": {
+		"test": "test",
+		"start": "node server"
+	},
+	"author": "Mihir",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "^1.19.1",
+		"cors": "^2.8.5",
+		"express": "^4.17.2",
+		"is-empty": "^1.2.0",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.1.6",
+		"validator": "^13.7.0"
+	}
 }
