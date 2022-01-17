@@ -30,8 +30,6 @@ module.exports = function checkRegistrationVend( input ) {
 	if (Validator.isEmpty(input.contact)) {
 		errors.contact = "contact field can not be empty";
 	} else if (!Validator.isMobilePhone(input.contact, 'en-IN')) {
-	console.log(input.contact);
-	console.log( typeof input.contact )
 		errors.contact = "contact number is invalid";
 	}
 	if (Validator.isEmpty(input.openingTime)) {
