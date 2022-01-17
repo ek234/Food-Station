@@ -12,7 +12,7 @@ const Cust = require("../../models/customers");
 router.post("/register", (req, res) => {
 	var validation = validateRegisterInput(req.body);
 	if (validation.isValid) {
-		Cust.findOne({ email: req.body.email }).then(cust => { if (cust) {
+		Cust.findOne({ email: req.body.email }).then(cust => { if (!cust) {
 			const newCust = new Cust({
 				name: req.body.name,
 				email: req.body.email,
