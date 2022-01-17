@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
-const Key = "secretkey";
+const Key = require("../../../secret");
 
 const validateRegisterInput = require("../../validation/registerCust");
 const validateLoginInput = require("../../validation/loginCust");
