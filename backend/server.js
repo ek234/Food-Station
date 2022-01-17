@@ -18,11 +18,12 @@ connection.once('open', function() {
 	console.log("MongoDB connected");
 })
 
-/////////////////////////////////////////////////////////////////////////todo: add routes and API endpoints
 // routes
 var CustRouter = require("./routes/api/customer")
+var VendRouter = require("./routes/api/vendor")
 // setup API endpoints
 app.use("/api/cust", CustRouter);
+app.use("/api/vend", VendRouter);
 
 app.listen(PORT, function() {
 	console.log("server is running on port: " + PORT);
