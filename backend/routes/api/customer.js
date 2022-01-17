@@ -19,6 +19,7 @@ router.post("/register", (req, res) => {
 				contact: req.body.contact,
 				age: req.body.age,
 				batch: req.body.batch,
+				wallet: 0,
 				password: req.body.password
 			});
 			newCust.save().then(cust => res.json(cust)).catch(err => console.log(err));
