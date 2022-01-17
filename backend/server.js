@@ -20,7 +20,7 @@ connection.once('open', function() {
 
 /////////////////////////////////////////////////////////////////////////todo: add routes and API endpoints
 // routes
-var CustRouter = require("./routes/api/cust")
+var CustRouter = require("./routes/api/customer")
 // setup API endpoints
 app.use("/api/cust", CustRouter);
 
