@@ -19,11 +19,9 @@ connection.once('open', function() {
 })
 
 // routes
-var CustRouter = require("./routes/api/customer")
-var VendRouter = require("./routes/api/vendor")
+var UserRouter = require("./routes/api/user")
 // setup API endpoints
-app.use("/api/cust", CustRouter);
-app.use("/api/vend", VendRouter);
+app.use("/api/user", UserRouter);
 
 app.listen(PORT, function() {
 	console.log("server is running on port: " + PORT);
