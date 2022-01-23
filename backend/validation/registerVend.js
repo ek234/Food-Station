@@ -14,7 +14,7 @@ module.exports = function checkRegistrationVend( input ) {
 	input.password = !isEmpty(input.password) ? input.password : "";
 
 	if (!Validator.isBoolean(input.isCust)) {
-		errors.isVend = "isVend must be a bool";
+		errors.isCust = "isCust must be a bool";
 	}
 	if (Validator.isEmpty(input.manager)) {
 		errors.manager = "manager field can not be empty";
