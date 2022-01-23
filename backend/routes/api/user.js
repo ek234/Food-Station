@@ -26,7 +26,7 @@ router.get("/listVend", (req, res) => {
 
 router.post("/register", (req, res) => {
 
-	if (req.body.isCust === '1') { // for customers
+	if (req.body.isCust == "true") { // for customers
 		var validation = validateRegisterInputC(req.body);
 		if (validation.isValid) {
 			Cust.findOne({ email: req.body.email }).then(cust => { if (!cust) {
@@ -77,7 +77,7 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
 
-	if (req.body.isCust === '1') { // for customers
+	if (req.body.isCust == "true") { // for customers
 		var validation = validateLoginInputC(req.body);
 		if (validation.isValid) {
 			Cust.findOne({ email: req.body.email }).then(cust => { if (cust) {
