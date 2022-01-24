@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const Navbar = () => {
-	const navigate = useNavigate();
+	const nav = useNavigate();
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -17,26 +17,53 @@ const Navbar = () => {
 		variant="h6"
 		component="div"
 		sx={{ cursor: "pointer" }}
-		onClick={() => navigate("/")}
+		onClick={() => nav("/")}
 		>
 		Canteen Portal
 		</Typography>
 		<Box sx={{ flexGrow: 1 }} />
-		<Button color="inherit" onClick={() => navigate("/custs")}>
+		<Button color="inherit" onClick={() => nav("/custs")}>
 		Custs
 		</Button>
-		<Button color="inherit" onClick={() => navigate("/vends")}>
+		<Button color="inherit" onClick={() => nav("/vends")}>
 		Vends
 		</Button>
-		<Button color="inherit" onClick={() => navigate("/register")}>
-		Register
-		</Button>
-		<Button color="inherit" onClick={() => navigate("/login")}>
-		Login
-		</Button>
-		<Button color="inherit" onClick={() => navigate("/profile")}>
-		My Profile
-		</Button>
+		{ localStorage.getItem("isCust") === null ? (
+			<div>
+			<Button color="inherit" onClick={() => nav("/register")}>
+			Register
+			</Button>
+			<Button color="inherit" onClick={() => nav("/login")}>
+			Login
+			</Button>
+			</div>
+		) : (
+			<div>
+			<Button color="inherit" onClick={() => nav("/dashboard")}>
+			Dashboard
+			</Button>
+			<Button color="inherit" onClick={() => nav("/profile")}>
+			My Profile
+			</Button>
+			{ localStorage.getItem("isCust") === "true" ? (
+				<Button color="inherit" onClick={() => nav("/addMoney")}>
+				Add Money
+				</Button>
+			) : (
+				<></>
+			) }
+			<Button
+			color="inherit"
+			variant="outlined"
+			onClick={() => {
+				localStorage.removeItem("id");
+				localStorage.removeItem("isCust");
+				nav("/login");
+			}}>
+			logout
+			</Button>
+			</div>
+		)}
 		</Toolbar>
 		</AppBar>
 		</Box>
