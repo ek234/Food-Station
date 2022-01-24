@@ -161,6 +161,56 @@ router.post("/login", (req, res) => {
 
 	}});
 
+router.post("/edit", (req, res) => {
+
+	if (req.body.isCust == "true") { // for customers
+		var validation = validateRegisterInputC(req.body);
+		if (validation.isValid) {
+			Cust.findOne({ email: req.body.email }).then(cust => {
+				if (cust) {
+					cust.name = req.body.name,
+					cust.email = req.body.email,
+					cust.contact = req.body.contact,
+					cust.age = req.body.age,
+					cust.batch = req.body.batch,
+					cust.wallet = 0,
+					cust.password = req.body.password
+					cust.save().then(cust2 => res.status(200).json(cust2)).catch(err => res.status(400).send(err));
+			} else {
+				return res.status(400).json({ email: "email not registered" });
+			}})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+			return res.status(400).json(validation.errors);
+		}
+
+	} else { // for vendors
+		let validation = validateRegisterInputV(req.body);
+		if (validation.isValid) {
+			Vend.findOne({ email: req.body.email }).then(vend => {
+				if (vend) {
+					vend.manager = req.body.manager;
+					vend.shop = req.body.shop;
+					vend.email = req.body.email;
+					vend.contact = req.body.contact;
+					vend.openingTime = req.body.openingTime;
+					vend.closingTime = req.body.closingTime;
+					vend.password = req.body.password;
+					vend.save().then(vend2 => res.status(200).json(vend2)).catch(err => res.status(400).send(err));
+				} else {
+					return res.status(400).json({ user: "user not registered" });
+				}})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+			return res.status(400).json(validation.errors);
+		}
+	}
+
+});
 
 
 module.exports = router;
