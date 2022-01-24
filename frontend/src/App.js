@@ -6,6 +6,7 @@ import VendsList from "./components/users/VendsList";
 import CustsList from "./components/users/CustsList";
 import Home from "./components/common/Home";
 import Register from "./components/common/Register";
+import Login from "./components/common/Login";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
 
@@ -29,6 +30,7 @@ function App() {
 		<Route path="custs" element={<CustsList />} />
 		<Route path="vends" element={<VendsList />} />
 		<Route path="register" element={<Register />} />
+		<Route path="login" element={<Login />} />
 		<Route path="profile" element={<Profile />} />
 		</Route>
 		</Routes>
