@@ -7,6 +7,7 @@ import CustsList from "./components/users/CustsList";
 import Home from "./components/common/Home";
 import Register from "./components/common/Register";
 import Login from "./components/common/Login";
+import AddMoney from "./components/common/AddMoney";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
 
@@ -31,6 +32,7 @@ function App() {
 		<Route path="vends" element={<VendsList />} />
 		<Route path="register" element={<Register />} />
 		<Route path="login" element={<Login />} />
+		<Route path="addMoney" element={<AddMoney />} />
 		<Route path="profile" element={<Profile />} />
 		</Route>
 		</Routes>

@@ -1,0 +1,126 @@
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
+import { Grid, TextField, Button, MenuItem } from "@mui/material";
+
+const Profile = (props) => {
+
+	const nav = useNavigate();
+	if (localStorage.getItem("isCust") !== "true") {
+		alert("not a customer");
+		nav("/login");
+	}
+
+	const [editDisabled, setEditDisabled] = useState(true);
+
+	const email = localStorage.getItem("id");
+
+	const [user, setUser] = useState({});
+
+	const [wallet, setWallet] = useState(0);
+	const [toAdd, setToAdd] = useState(0);
+
+	useEffect(() => {
+
+		axios
+			.post("http://localhost:4000/api/user/profile", {
+				email: email.toString(),
+				isCust: "true"
+			})
+			.then((response) => {
+				setUser(response.data);
+				setWallet(typeof response.data.wallet !== 'undefined' ? response.data.wallet : 0);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+
+	}, [email]);
+
+	const onSubmit = (newVal) => {
+		newVal.preventDefault();
+
+		if (!editDisabled) {
+
+			const numToAdd = Number(toAdd);
+
+			if (typeof numToAdd === "number" && toAdd >= 0) {
+
+				const newWallet = Number(wallet) + Number(numToAdd);
+				setWallet(newWallet);
+
+				axios
+					.post("http://localhost:4000/api/user/addMoney", { wallet: newWallet, email: email })
+					.then((response) => {
+						alert("Added Money");
+						setEditDisabled(!editDisabled);
+					})
+					.catch(function (error) {
+						var data = error.response.data;
+						var message = "";
+						for (var it in data) {
+							message += data[it] + "\n";
+						}
+						alert(message);
+					});
+			} else {
+				alert("Invalid Value");
+			}
+		} else {
+			setEditDisabled(!editDisabled);
+		}
+	};
+
+
+	return (
+
+		<div>
+
+		<Grid container align={"center"} spacing={2}>
+
+		<Grid item xs={12}>
+		<TextField sx={{ minWidth: 550 }}
+		label="Wallet"
+		variant="outlined"
+		value={wallet}
+		disabled={true}
+		/>
+		</Grid>
+
+		{editDisabled ? (
+			<Grid item xs={12}>
+			<Button variant="contained" onClick={onSubmit}>
+			Add Money
+			</Button>
+			</Grid>
+		) : (
+
+			<Grid item xs={12}>
+			<Grid item xs={12}>
+			<TextField sx={{ minWidth: 550 }}
+			label="Add Money"
+			variant="outlined"
+			value={toAdd}
+			onChange={(newVal) => {setToAdd(newVal.target.value)}}
+			/>
+			</Grid>
+
+			<Grid item xs={12}>
+			<Button variant="contained" onClick={onSubmit}>
+			Save
+			</Button>
+			</Grid>
+			</Grid>
+		)}
+
+		</Grid>
+
+
+
+		</div>
+
+
+	)
+};
+
+export default Profile;
