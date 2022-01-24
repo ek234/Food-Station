@@ -31,6 +31,26 @@ router.get("/listVend", (req, res) => {
 		});
 });
 
+router.post("/profile", (req, res) => {
+	console.log(req.body.isCust);
+	if (req.body.isCust == "true") { // for customers
+		Cust.findOne({ email: req.body.email }).then(cust => {
+			console.log(cust);
+			return res.status(200).json(cust);
+		})
+			.catch((error) => {
+				console.log(error);
+			});
+	} else { // for vendors
+		Vend.findOne({ email: req.body.email }).then(vend => {
+			return res.status(200).json(vend);
+		})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+});
+
 router.post("/register", (req, res) => {
 
 	if (req.body.isCust == "true") { // for customers
