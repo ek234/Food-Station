@@ -212,5 +212,19 @@ router.post("/edit", (req, res) => {
 
 });
 
+router.post("/addMoney", (req, res) => {
+	Cust.findOne({ email: req.body.email }).then(cust => {
+		if (cust) {
+			cust.wallet = req.body.wallet;
+			cust.save().then(cust2 => res.status(200).json(cust2)).catch(err => res.status(400).send(err));
+		} else {
+			return res.status(400).json({ email: "email not registered" });
+		}})
+		.catch((error) => {
+			console.log(error);
+		});
+});
+
+
 
 module.exports = router;
