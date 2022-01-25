@@ -18,7 +18,7 @@ const Profile = (props) => {
 	const [user, setUser] = useState({});
 
 	const [wallet, setWallet] = useState(0);
-	const [toAdd, setToAdd] = useState(0);
+	const [toAdd, setToAdd] = useState("");
 
 	useEffect(() => {
 
@@ -52,8 +52,8 @@ const Profile = (props) => {
 				axios
 					.post("http://localhost:4000/api/user/addMoney", { wallet: newWallet, email: email })
 					.then((response) => {
-						alert("Added Money");
 						setEditDisabled(!editDisabled);
+						setToAdd("");
 					})
 					.catch(function (error) {
 						var data = error.response.data;
@@ -68,6 +68,7 @@ const Profile = (props) => {
 			}
 		} else {
 			setEditDisabled(!editDisabled);
+			setToAdd("");
 		}
 	};
 
