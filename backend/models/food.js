@@ -23,10 +23,21 @@ const FoodSchema = new Schema({
 		type: Boolean,
 		required: true
 	},
-	tags: {
-		type: String,
-		required: false
-	}
+	addons: {
+		type: [{
+			addonName: {
+				type: String,
+				required: true
+			},
+			addonPrice: {
+				type: Number,
+				required: true
+			}
+		}]
+	},
+	tags: [{
+		type: String
+	}]
 });
 
 module.exports = Food = mongoose.model("Foods", FoodSchema);
