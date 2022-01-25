@@ -50,7 +50,9 @@ const Navbar = () => {
 				Add Money
 				</Button>
 			) : (
-				<></>
+				<Button color="inherit" onClick={() => nav("/menu")}>
+				Menu
+				</Button>
 			) }
 			<Button
 			color="inherit"
