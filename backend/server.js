@@ -20,8 +20,10 @@ connection.once('open', function() {
 
 // routes
 var UserRouter = require("./routes/api/user")
+var FoodRouter = require("./routes/api/food")
 // setup API endpoints
 app.use("/api/user", UserRouter);
+app.use("/api/food", FoodRouter);
 
 app.listen(PORT, function() {
 	console.log("server is running on port: " + PORT);
