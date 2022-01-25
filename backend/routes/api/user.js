@@ -168,17 +168,17 @@ router.post("/edit", (req, res) => {
 		if (validation.isValid) {
 			Cust.findOne({ email: req.body.email }).then(cust => {
 				if (cust) {
-					cust.name = req.body.name,
-					cust.email = req.body.email,
-					cust.contact = req.body.contact,
-					cust.age = req.body.age,
-					cust.batch = req.body.batch,
-					cust.wallet = 0,
-					cust.password = req.body.password
+					cust.name = req.body.name;
+					cust.email = req.body.email;
+					cust.contact = req.body.contact;
+					cust.age = req.body.age;
+					cust.batch = req.body.batch;
+					cust.wallet = 0;
+					cust.password = req.body.password;
 					cust.save().then(cust2 => res.status(200).json(cust2)).catch(err => res.status(400).send(err));
-			} else {
-				return res.status(400).json({ email: "email not registered" });
-			}})
+				} else {
+					return res.status(400).json({ email: "email not registered" });
+				}})
 				.catch((error) => {
 					console.log(error);
 				});
