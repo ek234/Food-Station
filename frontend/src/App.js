@@ -8,6 +8,7 @@ import Home from "./components/common/Home";
 import Register from "./components/common/Register";
 import Login from "./components/common/Login";
 import AddMoney from "./components/common/AddMoney";
+import Menu from "./components/common/Menu";
 import Dashboard from "./components/common/Dashboard";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
@@ -35,6 +36,7 @@ function App() {
 		<Route path="login" element={<Login />} />
 		<Route path="addMoney" element={<AddMoney />} />
 		<Route path="dashboard" element={<Dashboard />} />
+		<Route path="menu" element={<Menu />} />
 		<Route path="profile" element={<Profile />} />
 		</Route>
 		</Routes>
