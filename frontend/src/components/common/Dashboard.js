@@ -120,6 +120,7 @@ const Dashboard = (props) => {
 			<TableHead>
 			<TableRow>
 			<TableCell>Sr No.</TableCell>
+			<TableCell>Buyer</TableCell>
 			<TableCell>Shop</TableCell>
 			<TableCell>Item</TableCell>
 			<TableCell>AddOns</TableCell>
@@ -135,6 +136,7 @@ const Dashboard = (props) => {
 			{orders.map((order, ind) => (
 				<TableRow key={ind}>
 				<TableCell>{ind.toString()}</TableCell>
+				<TableCell>{order.buyer.toString()}</TableCell>
 				<TableCell>{order.shop.toString()}</TableCell>
 				<TableCell>{order.item.toString()}</TableCell>
 				<TableCell>{order.addons.toString()}</TableCell>

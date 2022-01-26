@@ -16,6 +16,7 @@ router.get("/fetch", (req, res) => {
 router.post("/addOrder", (req, res) => {
 	console.log("didi")
 	const newOrder = new Order({
+		buyer: req.body.buyer,
 		shop: req.body.shop,
 		item: req.body.item,
 		addons: req.body.addons,
@@ -28,7 +29,7 @@ router.post("/addOrder", (req, res) => {
 });
 
 router.post("/deleteItem", (req, res) => {
-	Order.deleteOne({ shop: req.body.shop, item: req.body.item, addons: req.body.addons, quantity: req.body.quantity, price: req.body.price })
+	Order.deleteOne({ buyer: req.body.buyer, shop: req.body.shop, item: req.body.item, addons: req.body.addons, quantity: req.body.quantity, price: req.body.price })
 		.then(order => {
 			return res.status(200).json(order);
 		})
@@ -38,9 +39,7 @@ router.post("/deleteItem", (req, res) => {
 });
 
 router.post("/nextState", (req, res) => {
-	const oldOrd = { shop: req.body.order.shop, item: req.body.order.item, addons: req.body.order.addons, placedTime: req.body.order.placedTime, quantity: req.body.order.quantity, price: req.body.order.price, state: req.body.order.state };
-	console.log(oldOrd);
-	Order.findOne( oldOrd )
+	Order.findOne( req.body.order )
 		.then(order => {
 			if (order) {
 				order.state = req.body.newState;
