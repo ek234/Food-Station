@@ -4,13 +4,28 @@ const router = express.Router();
 const Order = require("../../models/orders");
 
 router.get("/fetch", (req, res) => {
-	Order.find({ shop: req.query.shop })
+	const shop = req.query.shop;
+	const buyer = req.query.buyer;
+
+	if (shop) {
+		Order.find({ shop: shop })
 		.then(order => {
 			return res.status(200).json(order);
 		})
 		.catch((error) => {
 			console.log(error);
 		});
+	} else if (buyer) {
+		Order.find({ buyer: buyer })
+		.then(order => {
+			return res.status(200).json(order);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	} else {
+		console.log("invalid request");
+	}
 });
 
 router.post("/addOrder", (req, res) => {

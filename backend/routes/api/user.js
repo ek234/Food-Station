@@ -13,6 +13,16 @@ const validateLoginInputV = require("../../validation/loginVend");
 const Cust = require("../../models/customers");
 const Vend = require("../../models/vendors");
 
+router.get("/fetchAllVend", (req, res) => {
+	Vend.find()
+		.then(vend => {
+			return res.status(200).json(vend);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+});
+
 router.get("/listCust", (req, res) => {
 	Cust.find({ name: { "$regex": req.query.search, "$options": "i" } }).then(cust => {
 		return res.status(200).json(cust);

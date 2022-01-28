@@ -251,16 +251,16 @@ const Dashboard = (props) => {
 		<Table size="small">
 		<TableHead>
 		<TableRow>
-		<TableCell>Sr No.</TableCell>
-		<TableCell>Name</TableCell>
-		<TableCell>Shop</TableCell>
-		<TableCell>Price</TableCell>
-		<TableCell>Rating</TableCell>
-		<TableCell>IsVeg</TableCell>
-		<TableCell>AddOns</TableCell>
-		<TableCell>Tags</TableCell>
-		<TableCell>Edit</TableCell>
-		<TableCell>Delete</TableCell>
+			<TableCell>Sr No.</TableCell>
+			<TableCell>Name</TableCell>
+			<TableCell>Shop</TableCell>
+			<TableCell>Price</TableCell>
+			<TableCell>Rating</TableCell>
+			<TableCell>IsVeg</TableCell>
+			<TableCell>AddOns</TableCell>
+			<TableCell>Tags</TableCell>
+			<TableCell>Edit</TableCell>
+			<TableCell>Delete</TableCell>
 		</TableRow>
 		</TableHead>
 		<TableBody>

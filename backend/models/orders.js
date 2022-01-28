@@ -20,7 +20,7 @@ const OrderSchema = new Schema({
 		required: false
 	}],
 	placedTime: {
-		type: String,
+		type: Number,
 		required: true
 	},
 	quantity: {
