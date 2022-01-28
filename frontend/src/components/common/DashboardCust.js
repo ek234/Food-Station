@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, TextField, Checkbox, FormControlLabel, Autocomplete, Button, Rating, Alert, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Paper, TableCell, TableHead, TableRow, Table, TableBody, List, IconButton, InputAdornment, Box, Slider } from "@mui/material";
+import { Grid, TextField, Checkbox, FormControlLabel, Autocomplete, Button, Rating, Alert, Dialog, DialogTitle, DialogActions, DialogContent, Typography, Paper, TableCell, TableHead, TableRow, Table, TableBody, List, IconButton, InputAdornment, Box, Slider, ArrowDownwardIcon, ArrowUpwardIcon } from "@mui/material";
 import Fuse from 'fuse.js'
 
 const Dashboard = (props) => {
 
 	const email = localStorage.getItem("id");
 
+	const [wallet, setWallet] = useState(0);
 	const [cust, setCust] = useState({});
 	const [menu, setMenu] = useState([]);
 	const [filtMenu, setFiltMenu] = useState({});
@@ -16,7 +17,7 @@ const Dashboard = (props) => {
 	const [veggieFilt, setVeggieFilt] = useState("all");
 	const [shopsFilt, setShopsFilt] = useState([]);
 	const [tagFilt, setTagFilt] = useState("");
-	const [pRangeFilt, setPRangeFilt] = useState();
+	const [pRangeFilt, setPRangeFilt] = useState([0,100]);
 	const [POrderFilt, setPOrderFilt] = useState("dis");
 	const [ROrderFilt, setROrderFilt] = useState("dis");
 
@@ -78,8 +79,10 @@ const Dashboard = (props) => {
 				})
 			}
 
-			// todo:
-			if ( pRangeFilt ){
+			if ( pRangeFilt.length > 0 ){
+				tmpM = tmpM.filter((it) => {
+					return pRangeFilt[0]<=it.price && it.price<=pRangeFilt[1];
+				})
 			}
 
 			if ( POrderFilt !== "dis" ) {
@@ -135,6 +138,7 @@ const Dashboard = (props) => {
 			})
 			.then((response) => {
 				setCust(response.data);
+				setWallet(response.data.wallet);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -146,25 +150,39 @@ const Dashboard = (props) => {
 	}
 
 	const handleSubmit = () => {
-		axios
-			.post("http://localhost:4000/api/order/addOrder", {
-				buyer: cust.email.toString(),
-				shop: itemBuy.shop.toString(),
-				item: itemBuy.name.toString(),
-				addons: addonsBuy.map(addon => addon.addonName),
-				placedTime: rn,
-				quantity: quantityBuy,
-				price: costBuy*quantityBuy,
-				state: states[0]
-			})
-			.then((response) => {
-				alert("placed order");
-				console.log(response);
-				handleExit();
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		if ( costBuy*quantityBuy <= wallet ) {
+			axios
+				.post("http://localhost:4000/api/order/addOrder", {
+					buyer: cust.email.toString(),
+					shop: itemBuy.shop.toString(),
+					item: itemBuy.name.toString(),
+					addons: addonsBuy.map(addon => addon.addonName),
+					placedTime: rn,
+					quantity: quantityBuy,
+					price: costBuy*quantityBuy,
+					state: states[0]
+				})
+				.then((response) => {
+					axios
+						.post("http://localhost:4000/api/user/addMoney", {
+							email: cust.email,
+							wallet: wallet-costBuy*quantityBuy
+						})
+						.then((response) => {
+							setWallet(response.data.wallet);
+							handleExit();
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+					alert("placed order");
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+			alert("insuficient balance");
+		}
 	}
 
 	const getTags = (inp) => {
@@ -184,11 +202,112 @@ const Dashboard = (props) => {
 			<TextField
 			label="Wallet"
 			variant="outlined"
-			value={cust && cust.wallet ? cust.wallet : ""}
+			value={wallet}
 			/>
 			</Grid>
 
-			<Grid item xs={12}>
+			<TextField
+			value={"Favorites"}
+			/>
+
+		<Grid item xs={12}>
+		<Paper>
+		<Table size="small">
+			<TableHead>
+			<TableRow>
+			<TableCell>Sr No.</TableCell>
+			<TableCell>Name</TableCell>
+			<TableCell>Shop</TableCell>
+			<TableCell>
+				Price
+				<Button onClick={ () => {
+					if (POrderFilt==="dis") {
+						setPOrderFilt("asc")
+						setROrderFilt("dis")
+					} else if (POrderFilt==="asc") {
+						setPOrderFilt("des")
+						setROrderFilt("dis")
+					} else {
+						setPOrderFilt("dis")
+					}
+				}
+				}>
+					{POrderFilt}
+				</Button>
+			</TableCell>
+			<TableCell>
+				Rating
+				<Button onClick={ () => {
+					if (ROrderFilt==="dis") {
+						setROrderFilt("asc")
+						setPOrderFilt("dis")
+					} else if (ROrderFilt==="asc") {
+						setROrderFilt("des")
+						setPOrderFilt("dis")
+					} else {
+						setROrderFilt("dis")
+					}
+				}
+				}>
+					{ROrderFilt}
+				</Button>
+			</TableCell>
+			<TableCell>IsVeg</TableCell>
+			<TableCell>AddOns</TableCell>
+			<TableCell>Tags</TableCell>
+			<TableCell>remove from Fav</TableCell>
+			<TableCell>Buy</TableCell>
+			</TableRow>
+			</TableHead>
+			<TableBody>
+			{
+				Array.isArray(favMenu) ?
+					favMenu.map((it, ind) => (
+						<TableRow key={ind}>
+						<TableCell>{ind.toString()}</TableCell>
+						<TableCell>{it.name.toString()}</TableCell>
+						<TableCell>{it.shop.toString()}</TableCell>
+						<TableCell>{it.price.toString()}</TableCell>
+						<TableCell><Rating value={it.rating ? it.rating : 0} readOnly/></TableCell>
+						<TableCell>{it.isVeg.toString()}</TableCell>
+						<TableCell>{it.addons.map(it => [it.addonName, ":", it.addonPrice, "\n"])}</TableCell>
+						<TableCell>{it.tags.toString()}</TableCell>
+						<TableCell>{
+							<Button
+							variant="outlined"
+							onClick={() => setFavMenu(prev => prev.filter(m => m.shop!==it.shop || m.name!==it.name))}>
+							remove
+							</Button>
+						}</TableCell>
+						<TableCell>{
+							isShopAvailable( allVends.find(v => v.shop === it.shop) ) ? (
+							<Button
+							variant="outlined"
+							onClick={() => {
+								setItemBuy(it);
+								setItemAddonList(it.addons);
+								setItemTagsList(it.tags);
+								setCostBuy(Number(it.price));
+								setQuantityBuy(1);
+								setOpen(true);
+							}}>
+							buy
+							</Button>
+							) : (
+									<TextField
+									value="closed shop"
+									disabled={true}
+									/>
+							)
+						}</TableCell>
+						</TableRow>
+					)) : null}
+			</TableBody>
+			</Table>
+			</Paper>
+			</Grid>
+
+			<Grid item xs={3}>
 			<TextField
 			label="search"
 			variant="outlined"
@@ -197,7 +316,7 @@ const Dashboard = (props) => {
 			/>
 			</Grid>
 
-			<Grid item xs={12}>
+			<Grid item xs={1}>
 			<FormControlLabel
 				label={veggieFilt}
 				control={
@@ -217,7 +336,7 @@ const Dashboard = (props) => {
 			/>
 			</Grid>
 
-			<Grid item xs={12}>
+			<Grid item xs={3}>
 			<Autocomplete
 			multiple
 			filterSelectedOptions
@@ -229,7 +348,7 @@ const Dashboard = (props) => {
 			/>
 			</Grid>
 
-			<Grid item xs={12}>
+			<Grid item xs={3}>
 			<Autocomplete
 			multiple
 			filterSelectedOptions
@@ -244,6 +363,18 @@ const Dashboard = (props) => {
 		/>
 		</Grid>
 
+		<Grid item xs={2}>
+		<Typography gutterBottom>
+			price range: {pRangeFilt[0]}-{pRangeFilt[1]}
+		</Typography>
+		<Slider
+			value={pRangeFilt}
+			onChange={(e,v) => setPRangeFilt(v)}
+			valueLabelDisplay="auto"
+			label="h"
+		/>
+		</Grid>
+
 		<Grid item xs={12}>
 		<Paper>
 		<Table size="small">
@@ -252,8 +383,40 @@ const Dashboard = (props) => {
 			<TableCell>Sr No.</TableCell>
 			<TableCell>Name</TableCell>
 			<TableCell>Shop</TableCell>
-			<TableCell>Price</TableCell>
-			<TableCell>Rating</TableCell>
+			<TableCell>
+				Price
+				<Button onClick={ () => {
+					if (POrderFilt==="dis") {
+						setPOrderFilt("asc")
+						setROrderFilt("dis")
+					} else if (POrderFilt==="asc") {
+						setPOrderFilt("des")
+						setROrderFilt("dis")
+					} else {
+						setPOrderFilt("dis")
+					}
+				}
+				}>
+					{POrderFilt}
+				</Button>
+			</TableCell>
+			<TableCell>
+				Rating
+				<Button onClick={ () => {
+					if (ROrderFilt==="dis") {
+						setROrderFilt("asc")
+						setPOrderFilt("dis")
+					} else if (ROrderFilt==="asc") {
+						setROrderFilt("des")
+						setPOrderFilt("dis")
+					} else {
+						setROrderFilt("dis")
+					}
+				}
+				}>
+					{ROrderFilt}
+				</Button>
+			</TableCell>
 			<TableCell>IsVeg</TableCell>
 			<TableCell>AddOns</TableCell>
 			<TableCell>Tags</TableCell>
@@ -277,7 +440,7 @@ const Dashboard = (props) => {
 						<TableCell>{
 							<Button
 							variant="outlined"
-							onClick={() => setFavMenu(prev => [...prev, it])}>
+							onClick={() => setFavMenu(prev => [...prev.filter(m => m.shop!==it.shop || m.name!==it.name), it])}>
 							add
 							</Button>
 						}</TableCell>
