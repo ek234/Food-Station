@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, TextField, Button, Alert, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Paper, TableCell, TableHead, TableRow, Table, TableBody, List, IconButton, InputAdornment } from "@mui/material";
+import { Grid, TextField, Button, Rating, Dialog, DialogActions, DialogContent, Paper, TableCell, TableHead, TableRow, Table, TableBody } from "@mui/material";
 import  { useNavigate } from "react-router-dom";
 
 const Dashboard = (props) => {
@@ -270,7 +270,7 @@ const Dashboard = (props) => {
 			<TableCell>{item.name.toString()}</TableCell>
 			<TableCell>{item.shop.toString()}</TableCell>
 			<TableCell>{item.price.toString()}</TableCell>
-			<TableCell>{item.rating.toString()}</TableCell>
+			<TableCell><Rating value={item.rating ? item.rating : 0} precision={0.5} readOnly/></TableCell>
 			<TableCell>{item.isVeg.toString()}</TableCell>
 			<TableCell>{item.addons.map(it => [it.addonName, ":", it.addonPrice, " "])}</TableCell>
 			<TableCell>{item.tags.toString()}</TableCell>

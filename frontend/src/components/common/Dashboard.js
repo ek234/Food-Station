@@ -13,7 +13,7 @@ const Dashboard = (props) => {
 		nav("/login");
 	}
 
-	if (isCust) {
+	if ( isCust === "true" ) {
 		return <DCust/>
 	} else {
 		return <DVend/>

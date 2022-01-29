@@ -46,12 +46,10 @@ const Profile = (props) => {
 
 			if (typeof numToAdd === "number" && toAdd >= 0) {
 
-				const newWallet = Number(wallet) + Number(numToAdd);
-				setWallet(newWallet);
-
 				axios
-					.post("http://localhost:4000/api/user/addMoney", { wallet: newWallet, email: email })
+					.post("http://localhost:4000/api/user/addMoney", { wallet: Number(numToAdd), email: email })
 					.then((response) => {
+						setWallet(response.data.wallet)
 						setEditDisabled(!editDisabled);
 						setToAdd("");
 					})

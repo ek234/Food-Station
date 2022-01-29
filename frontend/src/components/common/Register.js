@@ -4,7 +4,6 @@ import { Grid, TextField, Button, MenuItem, Alert } from "@mui/material";
 import { TimePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 
-
 const Register = (props) => {
 
 	const [isCust, setIsCust] = useState(true);

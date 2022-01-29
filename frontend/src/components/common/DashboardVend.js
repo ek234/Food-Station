@@ -33,6 +33,22 @@ const Dashboard = (props) => {
 			});
 	}, [email]);
 
+	const sendMail = (order, orderStatus) => {
+		console.log("hi")
+		axios
+			.post("http://localhost:4000/api/order/sendMail", {
+				buyer: order.buyer,
+				orderStatus: "Vendor " + order.shop + " has " + orderStatus + " your order",
+				orderDetails: order
+			})
+			.then((res) => {
+				console.log(res.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	const handleNext = (order) => {
 		let newState = "";
 		if ( order.state === states[0] ) {
@@ -42,7 +58,6 @@ const Dashboard = (props) => {
 					counter += 1;
 				}
 			});
-			console.log(counter)
 			if ( counter < 10 ) {
 				newState = states[1];
 			} else {
@@ -62,6 +77,10 @@ const Dashboard = (props) => {
 					axios.get("http://localhost:4000/api/order/fetch", { params: { shop: vend.shop } })
 						.then((res) => {
 							setOrders(res.data);
+							if (newState === states[1]) {
+								console.log("did")
+								sendMail( order, "accepted" );
+							}
 						})
 						.catch((error) => {
 							console.log(error);
@@ -75,11 +94,25 @@ const Dashboard = (props) => {
 
 	const handleReject = (order) => {
 		if ( order.state === states[0] ) {
-			axios.post("http://localhost:4000/api/order/nextState", { order: order, newState: states[5] })
+			axios
+				.post("http://localhost:4000/api/order/nextState", { order: order, newState: states[5] })
 				.then((res) => {
-					axios.get("http://localhost:4000/api/order/fetch", { params: { shop: vend.shop } })
+					axios
+						.post("http://localhost:4000/api/user/addMoney", {
+							email: order.buyer.toString(),
+							wallet: order.price
+						})
+						.then((response) => {
+							alert("returned money");
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+					axios
+						.get("http://localhost:4000/api/order/fetch", { params: { shop: vend.shop } })
 						.then((res) => {
 							setOrders(res.data);
+							sendMail( order, "rejected" );
 						})
 						.catch((error) => {
 							console.log(error);
@@ -120,7 +153,7 @@ const Dashboard = (props) => {
 						<TableCell>{order.item.toString()}</TableCell>
 						<TableCell>{order.addons.toString()}</TableCell>
 						<TableCell>{order.quantity.toString()}</TableCell>
-						<TableCell>{order.placedTime.toString()}</TableCell>
+						<TableCell>{Math.floor(order.placedTime/60)}:{order.placedTime%60}</TableCell>
 						<TableCell>{order.price.toString()}</TableCell>
 						<TableCell>{order.state.toString()}</TableCell>
 						<TableCell>

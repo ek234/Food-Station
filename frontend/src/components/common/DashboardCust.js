@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, TextField, Checkbox, FormControlLabel, Autocomplete, Button, Rating, Alert, Dialog, DialogTitle, DialogActions, DialogContent, Typography, Paper, TableCell, TableHead, TableRow, Table, TableBody, List, IconButton, InputAdornment, Box, Slider, ArrowDownwardIcon, ArrowUpwardIcon } from "@mui/material";
+import { Grid, TextField, Checkbox, FormControlLabel, Autocomplete, Button, Rating, Dialog, DialogActions, DialogContent, Typography, Paper, TableCell, TableHead, TableRow, Table, TableBody, Slider } from "@mui/material";
 import Fuse from 'fuse.js'
 
 const Dashboard = (props) => {
@@ -165,8 +165,8 @@ const Dashboard = (props) => {
 				.then((response) => {
 					axios
 						.post("http://localhost:4000/api/user/addMoney", {
-							email: cust.email,
-							wallet: wallet-costBuy*quantityBuy
+							email: cust.email.toString(),
+							wallet: Number(-costBuy*quantityBuy)
 						})
 						.then((response) => {
 							setWallet(response.data.wallet);
@@ -268,7 +268,7 @@ const Dashboard = (props) => {
 						<TableCell>{it.name.toString()}</TableCell>
 						<TableCell>{it.shop.toString()}</TableCell>
 						<TableCell>{it.price.toString()}</TableCell>
-						<TableCell><Rating value={it.rating ? it.rating : 0} readOnly/></TableCell>
+						<TableCell><Rating value={it.rating ? it.rating : 0} precision={0.5} readOnly/></TableCell>
 						<TableCell>{it.isVeg.toString()}</TableCell>
 						<TableCell>{it.addons.map(it => [it.addonName, ":", it.addonPrice, "\n"])}</TableCell>
 						<TableCell>{it.tags.toString()}</TableCell>
@@ -433,7 +433,7 @@ const Dashboard = (props) => {
 						<TableCell>{it.name.toString()}</TableCell>
 						<TableCell>{it.shop.toString()}</TableCell>
 						<TableCell>{it.price.toString()}</TableCell>
-						<TableCell><Rating value={it.rating ? it.rating : 0} readOnly/></TableCell>
+						<TableCell><Rating value={it.rating ? it.rating : 0} precision={0.5} readOnly/></TableCell>
 						<TableCell>{it.isVeg.toString()}</TableCell>
 						<TableCell>{it.addons.map(it => [it.addonName, ":", it.addonPrice, "\n"])}</TableCell>
 						<TableCell>{it.tags.toString()}</TableCell>

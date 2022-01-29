@@ -57,48 +57,28 @@ router.post("/deleteItem", (req, res) => {
 });
 
 router.post("/editItem", (req, res) => {
-	console.log(req.body.shop)
-	console.log(req.body.ogName)
 	Food.findOne({ shop: req.body.shop, name: req.body.ogName })
 		.then(food => {
 			if (food) {
-				console.log(food);
 				food.name = req.body.name;
 				food.shop = req.body.shop;
 				food.price = req.body.price;
 				food.isVeg = req.body.isVeg;
 				food.tags = req.body.tags.split(",");
 				food.addons = req.body.addons;
-				console.log(food);
 				food.save().then((food) => res.json(food)).catch((err) => console.log(err));
 			} else {
-				console.log("hmm whattt");
-				//const newFood = new Food({
-					//name: req.body.name,
-					//shop: req.body.shop,
-					//price: req.body.price,
-					//rating: req.body.rating,
-					//isVeg: req.body.isVeg,
-					//tags: req.body.tags.split(","),
-					//addons: req.body.addons
-				//});
-				//newFood.save().then((food) => res.json(food)).catch((err) => console.log(err));
-
+				console.log("this item could not be found");
 			}
 		})
-	//.catch((error) => {
-	//console.log(error);
-	//});
 });
 
 router.post("/setRating", (req, res) => {
-	console.log(req.body)
 	Food.findOne(req.body.item)
 		.then(food => {
 			if (food) {
 				food.rating = Number(( Number(food.rating) * Number(food.numRating) + Number(req.body.newRating) ) / (Number(food.numRating) + 1))
 				food.numRating = Number(food.numRating) + 1;
-				console.log(food);
 				food.save().then((food) => res.json(food)).catch((err) => console.log(err));
 			} else {
 				console.log("this item could not be found");

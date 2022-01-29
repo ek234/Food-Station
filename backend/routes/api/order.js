@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer");
 
 const Order = require("../../models/orders");
 
@@ -29,7 +30,6 @@ router.get("/fetch", (req, res) => {
 });
 
 router.post("/addOrder", (req, res) => {
-	console.log("didi")
 	const newOrder = new Order({
 		buyer: req.body.buyer,
 		shop: req.body.shop,
@@ -66,6 +66,42 @@ router.post("/nextState", (req, res) => {
 		.catch((error) => {
 			console.log(error);
 		});
+});
+
+router.post("/sendMail", (req, res) => {
+	console.log("sendingaoeau")
+
+	async function main() {
+		let testAccount = await nodemailer.createTestAccount();
+		let transporter = nodemailer.createTransport({
+			host: "smtp.ethereal.email",
+			port: 587,
+			secure: false, // true for 465, false for other ports
+			auth: {
+				user: testAccount.user, // generated ethereal user
+				pass: testAccount.pass, // generated ethereal password
+			},
+		});
+
+		let info = await transporter.sendMail({
+			from: 'vendor', // sender address
+			to: req.body.buyer, // list of receivers
+			subject: "Foodserverer", // Subject line
+			text: req.body.orderStatus, // plain text body
+			html: "<b>Hello world?</b>", // html body
+		});
+
+		return info.messageId;
+
+		console.log("Message sent: %s", info.messageId);
+		// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+		// Preview only available when sending through an Ethereal account
+		console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+		// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+	}
+
+	return res.status(200).json(main().catch(console.error));
 });
 
 module.exports = router;

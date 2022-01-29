@@ -55,9 +55,14 @@ const Navbar = () => {
 				</Button>
 				</>
 			) : (
+				<>
+				<Button color="inherit" onClick={() => nav("/stats")}>
+				Stats
+				</Button>
 				<Button color="inherit" onClick={() => nav("/menu")}>
 				Menu
 				</Button>
+				</>
 			) }
 			<Button
 			color="inherit"
