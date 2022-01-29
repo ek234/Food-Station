@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const Key = require("../../../secret");
-
 const validateRegisterInputC = require("../../validation/registerCust");
 const validateLoginInputC = require("../../validation/loginCust");
 const validateRegisterInputV = require("../../validation/registerVend");
