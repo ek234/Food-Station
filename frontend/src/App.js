@@ -9,8 +9,10 @@ import Register from "./components/common/Register";
 import Login from "./components/common/Login";
 import AddMoney from "./components/common/AddMoney";
 import Menu from "./components/common/Menu";
+import MyOrders from "./components/common/MyOrders";
 import Dashboard from "./components/common/Dashboard";
 import Navbar from "./components/templates/Navbar";
+import Stats from "./components/common/Stats";
 import Profile from "./components/users/Profile";
 
 const Layout = () => {
@@ -35,7 +37,9 @@ function App() {
 		<Route path="register" element={<Register />} />
 		<Route path="login" element={<Login />} />
 		<Route path="addMoney" element={<AddMoney />} />
+		<Route path="myOrders" element={<MyOrders />} />
 		<Route path="dashboard" element={<Dashboard />} />
+		<Route path="stats" element={<Stats />} />
 		<Route path="menu" element={<Menu />} />
 		<Route path="profile" element={<Profile />} />
 		</Route>

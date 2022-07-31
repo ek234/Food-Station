@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
-import { Grid, TextField, Button, MenuItem } from "@mui/material";
+import { Grid, TextField, Button } from "@mui/material";
 
-const Profile = (props) => {
+const Profile = () => {
 
 	const nav = useNavigate();
 	if (localStorage.getItem("isCust") !== "true") {
@@ -15,20 +15,17 @@ const Profile = (props) => {
 
 	const email = localStorage.getItem("id");
 
-	const [user, setUser] = useState({});
-
 	const [wallet, setWallet] = useState(0);
 	const [toAdd, setToAdd] = useState("");
 
 	useEffect(() => {
 
 		axios
-			.post("http://localhost:4000/api/user/profile", {
+			.post("/api/user/profile", {
 				email: email.toString(),
 				isCust: "true"
 			})
 			.then((response) => {
-				setUser(response.data);
 				setWallet(typeof response.data.wallet !== 'undefined' ? response.data.wallet : 0);
 			})
 			.catch((error) => {
@@ -46,12 +43,10 @@ const Profile = (props) => {
 
 			if (typeof numToAdd === "number" && toAdd >= 0) {
 
-				const newWallet = Number(wallet) + Number(numToAdd);
-				setWallet(newWallet);
-
 				axios
-					.post("http://localhost:4000/api/user/addMoney", { wallet: newWallet, email: email })
+					.post("/api/user/addMoney", { wallet: Number(numToAdd), email: email })
 					.then((response) => {
+						setWallet(response.data.wallet)
 						setEditDisabled(!editDisabled);
 						setToAdd("");
 					})

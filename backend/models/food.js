@@ -19,6 +19,11 @@ const FoodSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	numRating: {
+		type: Number,
+		default: 0,
+		required: true
+	},
 	isVeg: {
 		type: Boolean,
 		required: true

@@ -46,13 +46,23 @@ const Navbar = () => {
 			My Profile
 			</Button>
 			{ localStorage.getItem("isCust") === "true" ? (
+				<>
 				<Button color="inherit" onClick={() => nav("/addMoney")}>
 				Add Money
 				</Button>
+				<Button color="inherit" onClick={() => nav("/myOrders")}>
+				My Orders
+				</Button>
+				</>
 			) : (
+				<>
+				<Button color="inherit" onClick={() => nav("/stats")}>
+				Stats
+				</Button>
 				<Button color="inherit" onClick={() => nav("/menu")}>
 				Menu
 				</Button>
+				</>
 			) }
 			<Button
 			color="inherit"

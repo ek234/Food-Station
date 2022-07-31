@@ -12,7 +12,7 @@ module.exports = function checkLoginCust( input ) {
 	} else if (!Validator.isEmail(input.email)) {
 		errors.email = "email is invalid";
 	}
-	if (Validator.isEmpty(input.password)) {
+	if (input.google!==true && Validator.isEmpty(input.password)) {
 		errors.password = "password field can not be empty";
 	}
 

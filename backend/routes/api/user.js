@@ -1,9 +1,5 @@
 const express = require("express");
 const router = express.Router();
-//const jwt = require("jsonwebtoken");
-//const cookieMon = require("cookie-parser")
-
-const Key = require("../../../secret");
 
 const validateRegisterInputC = require("../../validation/registerCust");
 const validateLoginInputC = require("../../validation/loginCust");
@@ -12,6 +8,16 @@ const validateLoginInputV = require("../../validation/loginVend");
 
 const Cust = require("../../models/customers");
 const Vend = require("../../models/vendors");
+
+router.get("/fetchAllVend", (req, res) => {
+	Vend.find()
+		.then(vend => {
+			return res.status(200).json(vend);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+});
 
 router.get("/listCust", (req, res) => {
 	Cust.find({ name: { "$regex": req.query.search, "$options": "i" } }).then(cust => {
@@ -32,10 +38,8 @@ router.get("/listVend", (req, res) => {
 });
 
 router.post("/profile", (req, res) => {
-	console.log(req.body.isCust);
 	if (req.body.isCust == "true") { // for customers
 		Cust.findOne({ email: req.body.email }).then(cust => {
-			console.log(cust);
 			return res.status(200).json(cust);
 		})
 			.catch((error) => {
@@ -110,6 +114,48 @@ router.post("/register", (req, res) => {
 	}
 
 });
+
+router.post("/loginGoogle", (req, res) => {
+
+	if (req.body.isCust == "true") { // for customers
+
+		var validation = validateLoginInputC(req.body);
+		if (validation.isValid) {
+			Cust.findOne({ email: req.body.email }).then(cust => { if (cust) {
+				const payload = {
+					id: cust.email,
+					isCust: "true"
+				};
+				return res.status(200).json(payload);
+			} else {
+				return res.status(400).json({ email: "email not registered" });
+			}})
+				.catch((error) => {
+					console.log(error);
+				});
+		} else {
+			return res.status(400).json(validation.errors);
+		}
+
+	} else { // for vendors
+
+		var validation = validateLoginInputV(req.body);
+		if (validation.isValid) {
+			Vend.findOne({ email: req.body.email }).then(vend => { if (vend) {
+				const payload = {
+					id: vend.email,
+					isCust: "false"
+				};
+				return res.status(200).json(payload);
+			} else {
+				return res.status(400).json({ email: "email not registered" });
+			}})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+
+	}});
 
 router.post("/login", (req, res) => {
 
@@ -215,7 +261,7 @@ router.post("/edit", (req, res) => {
 router.post("/addMoney", (req, res) => {
 	Cust.findOne({ email: req.body.email }).then(cust => {
 		if (cust) {
-			cust.wallet = req.body.wallet;
+			cust.wallet += req.body.wallet;
 			cust.save().then(cust2 => res.status(200).json(cust2)).catch(err => res.status(400).send(err));
 		} else {
 			return res.status(400).json({ email: "email not registered" });
@@ -224,7 +270,5 @@ router.post("/addMoney", (req, res) => {
 			console.log(error);
 		});
 });
-
-
 
 module.exports = router;

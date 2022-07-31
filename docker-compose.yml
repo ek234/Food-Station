@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+
+  mongo:
+    image: mongo:5.0.6-focal
+    container_name: DASS_db
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: foodorderer
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: passman
+    volumes:
+      - data:/data
+
+  backend:
+    build: ./backend/
+    tty: true
+    container_name: DASS_backend
+    restart: always
+    depends_on:
+      - mongo
+    volumes:
+      - data:/data
+
+  frontend:
+    build: ./frontend/
+    container_name: DASS_frontend
+    restart: always
+    depends_on:
+      - backend
+
+  web:
+    build: ./nginx/
+    container_name: DASS_web
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - frontend
+      - backend
+
+
+volumes:
+  data:

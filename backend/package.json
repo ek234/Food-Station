@@ -4,8 +4,7 @@
 	"description": "backend",
 	"main": "server.js",
 	"scripts": {
-		"test": "test",
-		"start": "nodemon server || node server"
+		"start": "node server"
 	},
 	"author": "Mihir",
 	"license": "ISC",
@@ -14,9 +13,8 @@
 		"cors": "^2.8.5",
 		"express": "^4.17.2",
 		"is-empty": "^1.2.0",
-		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^6.1.6",
-		"nodemon": "^2.0.15",
+		"nodemailer": "^6.7.2",
 		"validator": "^13.7.0"
 	}
 }

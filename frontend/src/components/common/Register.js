@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Grid, TextField, Button, MenuItem, Alert } from "@mui/material";
-import { TimePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-
-const Register = (props) => {
+const Register = () => {
 
 	const [isCust, setIsCust] = useState(true);
 
@@ -70,7 +69,7 @@ const Register = (props) => {
 		}
 
 		axios
-			.post("http://localhost:4000/api/user/register", newUser)
+			.post("/api/user/register", newUser)
 			.then((response) => {
 				resetInputs();
 				alert("Added: " + response.data.email);

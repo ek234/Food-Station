@@ -12,20 +12,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connection to MongoDB
-mongoose.connect('mongodb://127.0.0.1:' + MONGO_PORT + '/' + DB_NAME, { useNewUrlParser: true });
+mongoose.connect('mongodb://root:passman@mongo:' + MONGO_PORT + '/' + DB_NAME + "?authSource=admin", { useNewUrlParser: true });
 const connection = mongoose.connection;
 connection.once('open', function() {
 	console.log("MongoDB connected");
 })
-
 // routes
 var UserRouter = require("./routes/api/user")
 var FoodRouter = require("./routes/api/food")
 var OrderRouter = require("./routes/api/order")
 // setup API endpoints
-app.use("/api/user", UserRouter);
-app.use("/api/food", FoodRouter);
-app.use("/api/order", OrderRouter);
+app.use("/user", UserRouter);
+app.use("/food", FoodRouter);
+app.use("/order", OrderRouter);
 
 app.listen(PORT, function() {
 	console.log("server is running on port: " + PORT);
