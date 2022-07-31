@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const OrderSchema = new Schema({
+	buyer: {
+		type: String,
+		required: true
+	},
 	shop: {
 		type: String,
 		required: true
@@ -16,7 +20,7 @@ const OrderSchema = new Schema({
 		required: false
 	}],
 	placedTime: {
-		type: String,
+		type: Number,
 		required: true
 	},
 	quantity: {

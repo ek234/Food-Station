@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import Autocomplete from "@mui/material/Autocomplete";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
+import {
+    Paper,
+    Grid,
+    TableCell,
+    TableHead,
+    TableRow,
+    Table,
+    TableBody,
+    Button,
+    TextField,
+    List,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 
-import SearchIcon from "@mui/icons-material/Search";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import {
+    Search as SearchIcon,
+    ArrowDownward as ArrowDownwardIcon,
+    ArrowUpward as ArrowUpwardIcon,
+} from "@mui/icons-material";
 
-const VendsList = (props) => {
+const VendsList = () => {
 	const [vends, setVends] = useState([]);
 	const [sort, setSort] = useState(true);
 	const [searchText, setSearchText] = useState("");
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:4000/api/user/listVend", { params: { search: searchText } }).then((response) => {
+			.get("/api/user/listVend", { params: { search: searchText } }).then((response) => {
 				setVends(response.data.sort((a, b) => {
 					if (a.manager !== undefined && b.manager !== undefined) {
 						return (!sort) === (a.manager > b.manager);	// '===' is used as xnor
@@ -59,7 +60,7 @@ const VendsList = (props) => {
 		setSearchText(event.target.value);
 
 		axios
-			.get("http://localhost:4000/api/user/listVend", { params: { search: searchText } }).then((response) => {
+			.get("/api/user/listVend", { params: { search: searchText } }).then((response) => {
 				setVends(response.data.sort((a, b) => {
 					if (a.manager !== undefined && b.manager !== undefined) {
 						return (!sort) === (a.manager > b.manager);	// '===' is used as xnor

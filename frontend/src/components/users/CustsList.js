@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import List from "@mui/material/List";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
+import {
+    Paper,
+    Grid,
+    TableCell,
+    TableHead,
+    TableRow,
+    Table,
+    TableBody,
+    Button,
+    TextField,
+    List,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 
-import SearchIcon from "@mui/icons-material/Search";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import {
+    Search as SearchIcon,
+    ArrowDownward as ArrowDownwardIcon,
+    ArrowUpward as ArrowUpwardIcon,
+} from "@mui/icons-material";
 
-const CustsList = (props) => {
+const CustsList = () => {
 	const [custs, setCusts] = useState([]);
 	const [sortName, setSortName] = useState(true);
 	const [searchText, setSearchText] = useState("");
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:4000/api/user/listCust", { params: { search: searchText } }).then((response) => {
+			.get("/api/user/listCust", { params: { search: searchText } }).then((response) => {
 				setCusts(response.data.sort((a, b) => {
 					if (a.name !== undefined && b.name !== undefined) {
 						return (!sortName) === (a.name > b.name);	// '===' is used as xnor
@@ -56,7 +60,7 @@ const CustsList = (props) => {
 		setSearchText(event.target.value);
 
 		axios
-			.get("http://localhost:4000/api/user/listCust", { params: { search: searchText } }).then((response) => {
+			.get("/api/user/listCust", { params: { search: searchText } }).then((response) => {
 				setCusts(response.data.sort((a, b) => {
 					if (a.name !== undefined && b.name !== undefined) {
 						return (!sortName) === (a.name > b.name);	// '===' is used as xnor

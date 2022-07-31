@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, TextField, Button, Alert, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Paper, TableCell, TableHead, TableRow, Table, TableBody, List, IconButton, InputAdornment } from "@mui/material";
+import { Grid, TextField, Button, Rating, Dialog, DialogActions, DialogContent, Paper, TableCell, TableHead, TableRow, Table, TableBody } from "@mui/material";
 import  { useNavigate } from "react-router-dom";
 
 const Dashboard = (props) => {
@@ -21,13 +21,14 @@ const Dashboard = (props) => {
 
 	useEffect(() => {
 		axios
-			.post("http://localhost:4000/api/user/profile", {
+			.post("/api/user/profile", {
 				email: email.toString(),
 				isCust: "false"
 			})
 			.then((response) => {
 				setVend(response.data);
-				axios.get("http://localhost:4000/api/food/fetch", { params: { shop: response.data.shop } })
+				axios
+					.get("/api/food/fetch", { params: { shop: response.data.shop } })
 					.then((res) => {
 						setMenu(res.data);
 					})
@@ -61,7 +62,8 @@ const Dashboard = (props) => {
 	}
 
 	const refresh = () => {
-		axios.get("http://localhost:4000/api/food/fetch", { params: { shop: shop } })
+		axios
+			.get("/api/food/fetch", { params: { shop: shop } })
 			.then((res) => {
 				setMenu(res.data);
 			})
@@ -78,7 +80,7 @@ const Dashboard = (props) => {
 
 	const handleAdd = () => {
 		axios
-			.post("http://localhost:4000/api/food/addItem", {
+			.post("/api/food/addItem", {
 				name: name.toString(),
 				shop: shop.toString(),
 				price: price.toString(),
@@ -108,7 +110,7 @@ const Dashboard = (props) => {
 
 	const deleteItem = (itemName) => {
 		axios
-			.post("http://localhost:4000/api/food/deleteItem", {
+			.post("/api/food/deleteItem", {
 				name: itemName.toString(),
 				shop: shop.toString()
 			})
@@ -123,7 +125,7 @@ const Dashboard = (props) => {
 	const handleEdit = (itemName) => {
 		console.log(edit)
 		axios
-			.post("http://localhost:4000/api/food/editItem", {
+			.post("/api/food/editItem", {
 				ogName: edit.toString(),
 				name: name.toString(),
 				shop: shop.toString(),
@@ -251,16 +253,16 @@ const Dashboard = (props) => {
 		<Table size="small">
 		<TableHead>
 		<TableRow>
-		<TableCell>Sr No.</TableCell>
-		<TableCell>Name</TableCell>
-		<TableCell>Shop</TableCell>
-		<TableCell>Price</TableCell>
-		<TableCell>Rating</TableCell>
-		<TableCell>IsVeg</TableCell>
-		<TableCell>AddOns</TableCell>
-		<TableCell>Tags</TableCell>
-		<TableCell>Edit</TableCell>
-		<TableCell>Delete</TableCell>
+			<TableCell>Sr No.</TableCell>
+			<TableCell>Name</TableCell>
+			<TableCell>Shop</TableCell>
+			<TableCell>Price</TableCell>
+			<TableCell>Rating</TableCell>
+			<TableCell>IsVeg</TableCell>
+			<TableCell>AddOns</TableCell>
+			<TableCell>Tags</TableCell>
+			<TableCell>Edit</TableCell>
+			<TableCell>Delete</TableCell>
 		</TableRow>
 		</TableHead>
 		<TableBody>
@@ -270,7 +272,7 @@ const Dashboard = (props) => {
 			<TableCell>{item.name.toString()}</TableCell>
 			<TableCell>{item.shop.toString()}</TableCell>
 			<TableCell>{item.price.toString()}</TableCell>
-			<TableCell>{item.rating.toString()}</TableCell>
+			<TableCell><Rating value={item.rating ? item.rating : 0} precision={0.5} readOnly/></TableCell>
 			<TableCell>{item.isVeg.toString()}</TableCell>
 			<TableCell>{item.addons.map(it => [it.addonName, ":", it.addonPrice, " "])}</TableCell>
 			<TableCell>{item.tags.toString()}</TableCell>

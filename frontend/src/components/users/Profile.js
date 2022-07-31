@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import { Grid, TextField, Button, MenuItem } from "@mui/material";
-import { TimePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const Profile = (props) => {
+const Profile = () => {
 
 	const nav = useNavigate();
 	if (localStorage.getItem("id") === null) {
@@ -16,8 +16,6 @@ const Profile = (props) => {
 
 	const isCust = localStorage.getItem("isCust") === "true";
 	const email = localStorage.getItem("id");
-
-	const [user, setUser] = useState({});
 
 	const [contact, setContact] = useState("");
 	const [password, setPassword] = useState("");
@@ -36,12 +34,11 @@ const Profile = (props) => {
 	useEffect(() => {
 
 		axios
-			.post("http://localhost:4000/api/user/profile", {
+			.post("/api/user/profile", {
 				email: email.toString(),
 				isCust: isCust.toString()
 			})
 			.then((response) => {
-				setUser(response.data);
 				console.log(response);
 				setContact(typeof response.data.contact !== 'undefined' ? response.data.contact : "");
 				setPassword(typeof response.data.password !== 'undefined' ? response.data.password : "");
@@ -83,7 +80,7 @@ const Profile = (props) => {
 			};
 
 			axios
-				.post("http://localhost:4000/api/user/edit", newUser)
+				.post("/api/user/edit", newUser)
 				.then((response) => {
 					alert("Edited: " + response.data.email);
 					setEditDisabled(!editDisabled);
